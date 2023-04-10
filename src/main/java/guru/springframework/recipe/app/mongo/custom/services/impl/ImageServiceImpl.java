@@ -1,13 +1,15 @@
 package guru.springframework.recipe.app.mongo.custom.services.impl;
 
-import guru.springframework.domain.Recipe;
-import guru.springframework.repositories.RecipeRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import guru.springframework.recipe.app.mongo.custom.domains.Recipe;
+import guru.springframework.recipe.app.mongo.custom.repositories.RecipeRepository;
+import guru.springframework.recipe.app.mongo.custom.services.ImageService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

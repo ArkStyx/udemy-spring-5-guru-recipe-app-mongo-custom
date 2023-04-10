@@ -1,9 +1,9 @@
 package guru.springframework.recipe.app.mongo.custom.services;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.Recipe;
-
 import java.util.Set;
+
+import guru.springframework.recipe.app.mongo.custom.commands.RecipeCommand;
+import guru.springframework.recipe.app.mongo.custom.domains.Recipe;
 
 public interface RecipeService {
 

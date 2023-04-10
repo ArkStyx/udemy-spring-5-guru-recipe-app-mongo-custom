@@ -1,11 +1,12 @@
-package guru.springframework.recipe.app.mongo.custom.converters;
+package guru.springframework.recipe.app.mongo.custom.converters.from_domains;
 
-import guru.springframework.commands.NotesCommand;
-import guru.springframework.domain.Notes;
-import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+
+import guru.springframework.recipe.app.mongo.custom.commands.NotesCommand;
+import guru.springframework.recipe.app.mongo.custom.domains.Notes;
+import lombok.Synchronized;
 
 @Component
 public class NotesToNotesCommand implements Converter<Notes, NotesCommand>{

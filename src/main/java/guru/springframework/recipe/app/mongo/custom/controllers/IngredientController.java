@@ -1,18 +1,19 @@
 package guru.springframework.recipe.app.mongo.custom.controllers;
 
-import guru.springframework.commands.IngredientCommand;
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.commands.UnitOfMeasureCommand;
-import guru.springframework.services.IngredientService;
-import guru.springframework.services.RecipeService;
-import guru.springframework.services.UnitOfMeasureService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import guru.springframework.recipe.app.mongo.custom.commands.IngredientCommand;
+import guru.springframework.recipe.app.mongo.custom.commands.RecipeCommand;
+import guru.springframework.recipe.app.mongo.custom.commands.UnitOfMeasureCommand;
+import guru.springframework.recipe.app.mongo.custom.services.IngredientService;
+import guru.springframework.recipe.app.mongo.custom.services.RecipeService;
+import guru.springframework.recipe.app.mongo.custom.services.UnitOfMeasureService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller

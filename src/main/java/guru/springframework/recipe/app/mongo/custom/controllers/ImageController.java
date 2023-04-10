@@ -1,8 +1,9 @@
 package guru.springframework.recipe.app.mongo.custom.controllers;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.services.ImageService;
-import guru.springframework.services.RecipeService;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import guru.springframework.recipe.app.mongo.custom.commands.RecipeCommand;
+import guru.springframework.recipe.app.mongo.custom.services.ImageService;
+import guru.springframework.recipe.app.mongo.custom.services.RecipeService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class ImageController {

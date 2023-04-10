@@ -1,9 +1,10 @@
 package guru.springframework.recipe.app.mongo.custom.repositories;
 
-import guru.springframework.domain.UnitOfMeasure;
+import java.util.Optional;
+
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
+import guru.springframework.recipe.app.mongo.custom.domains.UnitOfMeasure;
 
 public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure, String> {
 

@@ -1,17 +1,19 @@
 package guru.springframework.recipe.app.mongo.custom.commands;
 
-import guru.springframework.domain.Difficulty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
+
+import guru.springframework.recipe.app.mongo.custom.domains.Difficulty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

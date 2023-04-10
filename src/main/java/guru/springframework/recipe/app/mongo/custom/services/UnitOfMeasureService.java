@@ -1,8 +1,8 @@
 package guru.springframework.recipe.app.mongo.custom.services;
 
-import guru.springframework.commands.UnitOfMeasureCommand;
-
 import java.util.Set;
+
+import guru.springframework.recipe.app.mongo.custom.commands.UnitOfMeasureCommand;
 
 public interface UnitOfMeasureService {
 

@@ -1,17 +1,19 @@
 package guru.springframework.recipe.app.mongo.custom.services.impl;
 
-import guru.springframework.commands.IngredientCommand;
-import guru.springframework.converters.IngredientCommandToIngredient;
-import guru.springframework.converters.IngredientToIngredientCommand;
-import guru.springframework.domain.Ingredient;
-import guru.springframework.domain.Recipe;
-import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import guru.springframework.recipe.app.mongo.custom.commands.IngredientCommand;
+import guru.springframework.recipe.app.mongo.custom.converters.from_commands.IngredientCommandToIngredient;
+import guru.springframework.recipe.app.mongo.custom.converters.from_domains.IngredientToIngredientCommand;
+import guru.springframework.recipe.app.mongo.custom.domains.Ingredient;
+import guru.springframework.recipe.app.mongo.custom.domains.Recipe;
+import guru.springframework.recipe.app.mongo.custom.repositories.RecipeRepository;
+import guru.springframework.recipe.app.mongo.custom.repositories.UnitOfMeasureRepository;
+import guru.springframework.recipe.app.mongo.custom.services.IngredientService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

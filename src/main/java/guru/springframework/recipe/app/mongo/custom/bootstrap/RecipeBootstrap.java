@@ -1,19 +1,25 @@
 package guru.springframework.recipe.app.mongo.custom.bootstrap;
 
-import guru.springframework.domain.*;
-import guru.springframework.repositories.CategoryRepository;
-import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import guru.springframework.recipe.app.mongo.custom.domains.Category;
+import guru.springframework.recipe.app.mongo.custom.domains.Difficulty;
+import guru.springframework.recipe.app.mongo.custom.domains.Ingredient;
+import guru.springframework.recipe.app.mongo.custom.domains.Notes;
+import guru.springframework.recipe.app.mongo.custom.domains.Recipe;
+import guru.springframework.recipe.app.mongo.custom.domains.UnitOfMeasure;
+import guru.springframework.recipe.app.mongo.custom.repositories.CategoryRepository;
+import guru.springframework.recipe.app.mongo.custom.repositories.RecipeRepository;
+import guru.springframework.recipe.app.mongo.custom.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

@@ -1,18 +1,20 @@
 package guru.springframework.recipe.app.mongo.custom.services.impl;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.converters.RecipeCommandToRecipe;
-import guru.springframework.converters.RecipeToRecipeCommand;
-import guru.springframework.domain.Recipe;
-import guru.springframework.exceptions.NotFoundException;
-import guru.springframework.repositories.RecipeRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import guru.springframework.recipe.app.mongo.custom.commands.RecipeCommand;
+import guru.springframework.recipe.app.mongo.custom.converters.from_commands.RecipeCommandToRecipe;
+import guru.springframework.recipe.app.mongo.custom.converters.from_domains.RecipeToRecipeCommand;
+import guru.springframework.recipe.app.mongo.custom.domains.Recipe;
+import guru.springframework.recipe.app.mongo.custom.exceptions.NotFoundException;
+import guru.springframework.recipe.app.mongo.custom.repositories.RecipeRepository;
+import guru.springframework.recipe.app.mongo.custom.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

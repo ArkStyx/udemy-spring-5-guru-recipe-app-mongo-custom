@@ -1,11 +1,12 @@
-package guru.springframework.recipe.app.mongo.custom.converters;
+package guru.springframework.recipe.app.mongo.custom.converters.from_commands;
 
-import guru.springframework.commands.CategoryCommand;
-import guru.springframework.domain.Category;
-import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+
+import guru.springframework.recipe.app.mongo.custom.commands.CategoryCommand;
+import guru.springframework.recipe.app.mongo.custom.domains.Category;
+import lombok.Synchronized;
 
 @Component
 public class CategoryCommandToCategory implements Converter<CategoryCommand, Category>{

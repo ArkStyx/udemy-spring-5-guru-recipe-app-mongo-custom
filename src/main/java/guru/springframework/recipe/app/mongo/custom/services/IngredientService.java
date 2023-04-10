@@ -1,6 +1,6 @@
 package guru.springframework.recipe.app.mongo.custom.services;
 
-import guru.springframework.commands.IngredientCommand;
+import guru.springframework.recipe.app.mongo.custom.commands.IngredientCommand;
 
 public interface IngredientService {
 
