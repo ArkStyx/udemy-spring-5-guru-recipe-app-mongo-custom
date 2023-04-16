@@ -30,7 +30,7 @@ public class IngredientController {
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : listIngredients()
 	@GetMapping(value = "/recipe/{idRecetteDansUrl}/ingredients")
-	public String recupererListeIngredients(Model model, @PathVariable("idRecetteDansUrl") Long id) {
+	public String recupererListeIngredients(Model model, @PathVariable("idRecetteDansUrl") String id) {
 		log.debug("Id de la recette pour les ingredients recherches : " + id);
 		model.addAttribute("recipe", recipeService.findCommandById(id));
 		return "recipe/ingredient/list";
@@ -38,14 +38,14 @@ public class IngredientController {
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : showRecipeIngredient()
 	@GetMapping(value = "/recipe/{idRecette}/ingredient/{idIngredient}/show")
-	public String afficherIngredientDansRecette(Model model, @PathVariable Long idRecette, @PathVariable Long idIngredient) {
+	public String afficherIngredientDansRecette(Model model, @PathVariable String idRecette, @PathVariable String idIngredient) {
 		model.addAttribute("ingredient", ingredientService.recupererParIdRecetteEtIdIngredient(idRecette, idIngredient));
 		return "recipe/ingredient/show";
 	}
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : updateRecipeIngredient()
     @GetMapping("recipe/{recipeId}/ingredient/{id}/update")
-	public String modifierIngredientDansRecette(Model model, @PathVariable("recipeId") Long idRecette, @PathVariable("id") Long idIngredient) {
+	public String modifierIngredientDansRecette(Model model, @PathVariable("recipeId") String idRecette, @PathVariable("id") String idIngredient) {
     	model.addAttribute("ingredient", ingredientService.recupererParIdRecetteEtIdIngredient(idRecette, idIngredient));
     	model.addAttribute("listeUnitesDeMesure", unitOfMeasureService.recupererToutesLesUnitesDeMesure());
 		return "recipe/ingredient/ingredientform";
@@ -55,15 +55,15 @@ public class IngredientController {
 	@PostMapping("recipe/{recipeId}/ingredient")
 	public String sauvegarderOuModifierIngredientDansRecette(@ModelAttribute IngredientCommand ingredientCommand) {
 		IngredientCommand ingredientSauvegarde = ingredientService.sauvegarderIngredient(ingredientCommand);
-		Long idRecette = ingredientSauvegarde.getRecipeId();
-		Long idIngredient = ingredientSauvegarde.getId();
+		String idRecette = ingredientSauvegarde.getRecipeId();
+		String idIngredient = ingredientSauvegarde.getId();
 		
 		return "redirect:/recipe/" + idRecette + "/ingredient/" + idIngredient + "/show";
 	}
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : newIngredient()
     @GetMapping("recipe/{recipeId}/ingredient/new")
-    public String creerNouvelIngredient(Model model, @PathVariable("recipeId") Long idRecette) {
+    public String creerNouvelIngredient(Model model, @PathVariable("recipeId") String idRecette) {
     	
     	IngredientCommand ingredientCommand = new IngredientCommand();
     	ingredientCommand.setRecipeId(idRecette);
@@ -82,7 +82,7 @@ public class IngredientController {
 
 	// XXX correspondance nom methode JAVA GURU - John Thompson : deleteIngredient()
     @GetMapping("recipe/{recipeId}/ingredient/{id}/delete")
-    public String supprimerIngredient(@PathVariable("recipeId") Long idRecette, @PathVariable("id") Long idIngredient) {
+    public String supprimerIngredient(@PathVariable("recipeId") String idRecette, @PathVariable("id") String idIngredient) {
 
         log.info("Suppression ingredient dans recette - idRecette : " + idRecette + " / idIngredient : " + idIngredient);
     	ingredientService.supprimerIngredientDansRecetteParId(idRecette, idIngredient);

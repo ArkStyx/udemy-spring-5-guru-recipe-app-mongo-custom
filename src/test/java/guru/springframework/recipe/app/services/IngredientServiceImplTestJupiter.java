@@ -3,7 +3,7 @@ package guru.springframework.recipe.app.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -51,17 +51,21 @@ public class IngredientServiceImplTestJupiter {
 	void testRecupererParIdRecetteEtIdIngredient() {
 
 		/* Given */
-		Long idRecette = 1L;
-		Long idIngredient = 3L;
+		String idRecette = "1";
+		String idIngredient = "3";
+		
+		String id01 = "1";
+		String id02 = "2";
+		String id03 = "3";
 		
         Ingredient ingredient01 = new Ingredient();
-        ingredient01.setId(1L);
+        ingredient01.setId(id01);
 
         Ingredient ingredient02 = new Ingredient();
-        ingredient02.setId(2L);
+        ingredient02.setId(id02);
 
         Ingredient ingredient03 = new Ingredient();
-        ingredient03.setId(3L);
+        ingredient03.setId(id03);
         
 		Recipe recette = new Recipe();
 		recette.setId(idRecette);
@@ -70,7 +74,7 @@ public class IngredientServiceImplTestJupiter {
         recette.addIngredient(ingredient03);
 
 		Optional<Recipe> optionalRecipe = Optional.of(recette);
-		when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
+		when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
 		
 		/* When */
 		IngredientCommand ingredientCommand = ingredientService.recupererParIdRecetteEtIdIngredient(idRecette, idIngredient);
@@ -79,7 +83,7 @@ public class IngredientServiceImplTestJupiter {
 		assertNotNull(ingredientCommand);
 		assertEquals(idIngredient, ingredientCommand.getId());
 		assertEquals(idRecette, ingredientCommand.getRecipeId());
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
 	}
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : testSaveRecipeCommand()
@@ -87,8 +91,8 @@ public class IngredientServiceImplTestJupiter {
     public void testSauvegarderIngredient() throws Exception {
     	
 		/* Given */
-    	Long idRecette = 2L;
-    	Long idIngredient = 3L;
+    	String idRecette = "2";
+    	String idIngredient = "3";
     	
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId(idIngredient);
@@ -102,7 +106,7 @@ public class IngredientServiceImplTestJupiter {
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
     	
         Optional<Recipe> recipeOptional = Optional.of(new Recipe());
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
 		/* When */
         IngredientCommand ingredientCommandSauvegardee = ingredientService.sauvegarderIngredient(ingredientCommand);
@@ -111,7 +115,7 @@ public class IngredientServiceImplTestJupiter {
         assertNotNull(ingredientCommandSauvegardee);
         assertEquals(idIngredient, ingredientCommandSauvegardee.getId());
         assertEquals(idRecette, ingredientCommandSauvegardee.getRecipeId());
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
     
@@ -119,8 +123,8 @@ public class IngredientServiceImplTestJupiter {
 	@Test
     public void testSupprimerIngredientDansRecetteParId() throws Exception {
     	
-		Long idRecette = 1L;
-		Long idIngredient = 3L;
+		String idRecette = "1";
+		String idIngredient = "3";
 		
 		Recipe recette = new Recipe();
 		recette.setId(idRecette);
@@ -131,13 +135,13 @@ public class IngredientServiceImplTestJupiter {
 		recette.addIngredient(ingredient);
 		Optional<Recipe> optionalRecipe = Optional.of(recette);
 		
-		when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
+		when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
 		
 		/* When */
 		ingredientService.supprimerIngredientDansRecetteParId(idRecette, idIngredient);
 
 		/* Then */
-		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
     

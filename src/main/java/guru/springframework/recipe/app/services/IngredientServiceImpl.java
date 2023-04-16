@@ -29,7 +29,7 @@ public class IngredientServiceImpl implements IngredientService {
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : findByRecipeIdAndIngredientId()
 	@Override
-	public IngredientCommand recupererParIdRecetteEtIdIngredient(Long idRecette, Long idIngredient) {
+	public IngredientCommand recupererParIdRecetteEtIdIngredient(String idRecette, String idIngredient) {
 		
 		Optional<Recipe> optionalRecipe = recipeRepository.findById(idRecette);
 		if (!optionalRecipe.isPresent()) {
@@ -57,7 +57,7 @@ public class IngredientServiceImpl implements IngredientService {
 	@Override
 	public IngredientCommand sauvegarderIngredient(IngredientCommand ingredientCommand) {
 
-		Long idRecette = ingredientCommand.getRecipeId();
+		String idRecette = ingredientCommand.getRecipeId();
 		Optional<Recipe> optionalRecipe = recipeRepository.findById(idRecette);
 		
 		if (optionalRecipe.isPresent()) {
@@ -117,7 +117,7 @@ public class IngredientServiceImpl implements IngredientService {
 	
 	// XXX correspondance nom methode JAVA GURU - John Thompson : deleteById()
 	@Override
-	public void supprimerIngredientDansRecetteParId(Long idRecette, Long idIngredient) {
+	public void supprimerIngredientDansRecetteParId(String idRecette, String idIngredient) {
 
 		Optional<Recipe> optionalRecipe = recipeRepository.findById(idRecette);
 		if (optionalRecipe.isPresent()) {

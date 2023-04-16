@@ -33,7 +33,7 @@ public class RecipeController {
 	private static final String REDIRECTION = "redirect:/";
 	
     @GetMapping(value = "/recipe/{idRecupereDansUrl}/show")
-	public String showById(Model model, @PathVariable("idRecupereDansUrl") Long id) {
+	public String showById(Model model, @PathVariable("idRecupereDansUrl") String id) {
 		model.addAttribute(NOM_ATTRIBUT_DANS_TEMPLATE_THYMELEAF, recipeService.findById(id));
 		return NOM_REPERTOIRE_THYMELEAF + SEPARATEUR_REPERTOIRE_ET_TEMPLATE_THYMELEAF + "show";
 	}
@@ -45,7 +45,7 @@ public class RecipeController {
 	}
 	
     @GetMapping(value ="/recipe/{idRecupereDansUrl}/update")
-	public String updateRecipe(Model model, @PathVariable("idRecupereDansUrl") Long id) {
+	public String updateRecipe(Model model, @PathVariable("idRecupereDansUrl") String id) {
 		model.addAttribute(NOM_ATTRIBUT_DANS_TEMPLATE_THYMELEAF, recipeService.findCommandById(id));
 		return RECIPE_RECIPEFORM_URL;
 	}
@@ -66,7 +66,7 @@ public class RecipeController {
 	}
 
     @GetMapping("recipe/{idPourSuppression}/delete")
-	public String deleteById(@PathVariable("idPourSuppression") Long id) {
+	public String deleteById(@PathVariable("idPourSuppression") String id) {
 		log.info("Id de la recette supprimée : " + id);
 		recipeService.deleteById(id);
 		return REDIRECTION;

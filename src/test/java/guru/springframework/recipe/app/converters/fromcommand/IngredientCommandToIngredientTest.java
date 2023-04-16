@@ -15,10 +15,10 @@ import guru.springframework.recipe.app.domain.Ingredient;
 
 class IngredientCommandToIngredientTest {
 
-	private static final Long ID = 1L;
+	private static final String ID = "1";
 	private static final String DESCRIPTION = "DESCRIPTION";
 	private static final BigDecimal AMOUNT = new BigDecimal(15);
-	private static final Long UNIT_OF_MEASURE_ID = 2L;
+	private static final String UNIT_OF_MEASURE_ID = "2";
 
 	IngredientCommandToIngredient ingredientCommandToIngredient;
 	

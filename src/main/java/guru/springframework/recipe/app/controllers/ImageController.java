@@ -30,21 +30,21 @@ public class ImageController {
 	private final RecipeService recipeService;
 	
 	@GetMapping(value = "recipe/{id}/image")
-	public String getImageForm(Model model, @PathVariable Long id) {
+	public String getImageForm(Model model, @PathVariable String id) {
 		log.info("getImageForm - id recette recherchee : " + id);
 		model.addAttribute("recipe", recipeService.findCommandById(id));
 		return "recipe/imageuploadform";
 	}
 	
 	@PostMapping("recipe/{id}/image")
-	public String handleImagePost(@PathVariable Long id, @RequestParam("imagefile") MultipartFile file) {
+	public String handleImagePost(@PathVariable String id, @RequestParam("imagefile") MultipartFile file) {
 		log.info("handleImagePost - id recette recherchee : " + id);
 		imageService.saveImageFile(id, file);
 		return "redirect:/recipe/" + id + "/show";
 	}
 	
 	@GetMapping("recipe/{id}/recipeimage")
-	public void renderImageFromDB(@PathVariable Long id, HttpServletResponse response) throws IOException {
+	public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
 		log.info("renderImageFromDB - id recette recherchee : " + id);
 		RecipeCommand recipeCommand = recipeService.findCommandById(id);
 		if (recipeCommand.getImage() == null) {

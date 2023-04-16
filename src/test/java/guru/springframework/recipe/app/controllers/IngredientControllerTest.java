@@ -2,6 +2,7 @@ package guru.springframework.recipe.app.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,11 +57,11 @@ public class IngredientControllerTest {
 	void testRecupererListeIngredients() throws Exception {
 
 		/* Given */
-		Long idRecette = 1L;
+		String idRecette = "1";
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId(idRecette);
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		/* When */
 		
@@ -72,7 +73,7 @@ public class IngredientControllerTest {
 				andExpect(view().name("recipe/ingredient/list")).
 				andExpect(model().attributeExists("recipe"));
 		
-		verify(recipeService, times(1)).findCommandById(anyLong());
+		verify(recipeService, times(1)).findCommandById(anyString());
 
 	}
 	
@@ -80,11 +81,11 @@ public class IngredientControllerTest {
 	@Test
 	void testAfficherIngredientDansRecette() throws Exception {
 		/* Given */
-		Long idIngredient = 1L;
+		String idIngredient = "1";
 		IngredientCommand ingredientCommand = new IngredientCommand();
 		ingredientCommand.setId(idIngredient);
 		
-		when(ingredientService.recupererParIdRecetteEtIdIngredient(anyLong(), anyLong())).thenReturn(ingredientCommand);
+		when(ingredientService.recupererParIdRecetteEtIdIngredient(anyString(), anyString())).thenReturn(ingredientCommand);
 		
 		/* When */
 		
@@ -102,11 +103,11 @@ public class IngredientControllerTest {
 	void testModifierIngredientDansRecette() throws Exception {
 		
 		/* Given */
-		Long idIngredient = 1L;
+		String idIngredient = "1";
 		IngredientCommand ingredientCommand = new IngredientCommand();
 		ingredientCommand.setId(idIngredient);
 		
-        when(ingredientService.recupererParIdRecetteEtIdIngredient(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        when(ingredientService.recupererParIdRecetteEtIdIngredient(anyString(), anyString())).thenReturn(ingredientCommand);
         when(unitOfMeasureService.recupererToutesLesUnitesDeMesure()).thenReturn(new LinkedHashSet<>());
         
 		/* When */
@@ -125,10 +126,13 @@ public class IngredientControllerTest {
 	@Test
 	void testSauvegarderOuModifierIngredientDansRecette() throws Exception {
 
+		String id = "3";
+		String idRecette = "2";
+		
 		/* Given */
 		IngredientCommand ingredientCommand = new IngredientCommand();
-		ingredientCommand.setId(3L);
-		ingredientCommand.setRecipeId(2L);
+		ingredientCommand.setId(id);
+		ingredientCommand.setRecipeId(idRecette);
 		
 		when(ingredientService.sauvegarderIngredient(any())).thenReturn(ingredientCommand);
 		
@@ -150,12 +154,13 @@ public class IngredientControllerTest {
 	void testCreerNouvelIngredient() throws Exception {
 		
 		/* Given */
+		String idRecette = "1";
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId(idRecette);
         
         Set<UnitOfMeasureCommand> linkedHashSetUnitOfMeasureCommand = new LinkedHashSet<>();
 		
-        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
         when(unitOfMeasureService.recupererToutesLesUnitesDeMesure()).thenReturn(linkedHashSetUnitOfMeasureCommand);
         
 		/* When */
@@ -187,7 +192,7 @@ public class IngredientControllerTest {
 				andExpect(status().is3xxRedirection()).
 				andExpect(view().name("redirect:/recipe/2/ingredients"));
 		
-		verify(ingredientService, times(1)).supprimerIngredientDansRecetteParId(anyLong(), anyLong());
+		verify(ingredientService, times(1)).supprimerIngredientDansRecetteParId(anyString(), anyString());
 	}
 	
 }

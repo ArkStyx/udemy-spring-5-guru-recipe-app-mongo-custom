@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,6 +29,8 @@ import guru.springframework.recipe.app.repositories.RecipeRepository;
 
 class RecipeServiceImplTestJupiter {
 
+	private static final String ID = "1";
+	
 	RecipeServiceImpl recipeServiceImpl;
 	
 	@Mock
@@ -71,20 +73,20 @@ class RecipeServiceImplTestJupiter {
 	@Test
 	void testGetRecipeById() {
 		Recipe recette = new Recipe();
-		recette.setId(1L);
+		recette.setId(ID);
 		
 		Optional<Recipe> optionalRecette = Optional.of(recette);
-		when(recipeRepository.findById(anyLong())).thenReturn(optionalRecette);
+		when(recipeRepository.findById(anyString())).thenReturn(optionalRecette);
 		
 		RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId(ID);
 
         when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
 
-        RecipeCommand commandById = recipeServiceImpl.findCommandById(1L);
+        RecipeCommand commandById = recipeServiceImpl.findCommandById(ID);
 		
         assertNotNull(commandById);
-		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, never()).findAll();
 	}
 	
@@ -101,7 +103,7 @@ class RecipeServiceImplTestJupiter {
 
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
-        verify(recipeRepository, never()).findById(anyLong());
+        verify(recipeRepository, never()).findById(anyString());
     }
 
     @Test
@@ -110,12 +112,12 @@ class RecipeServiceImplTestJupiter {
         /* Given */
 
         /* When */
-        recipeServiceImpl.deleteById(anyLong());
+        recipeServiceImpl.deleteById(anyString());
 
         // TODO no 'when(...)', since method has void return type
 
         /* Then */
-        verify(recipeRepository, times(1)).deleteById(anyLong());
+        verify(recipeRepository, times(1)).deleteById(anyString());
     }
 
     @Test
@@ -123,10 +125,10 @@ class RecipeServiceImplTestJupiter {
 
         Optional<Recipe> recipeOptional = Optional.empty();
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         assertThrows(NotFoundException.class, () -> {
-        	recipeServiceImpl.findById(1L);
+        	recipeServiceImpl.findById(ID);
         });
     }
     

@@ -16,7 +16,7 @@ import guru.springframework.recipe.app.domain.enums.Difficulty;
 
 class RecipeCommandToRecipeTest {
 
-    private static final Long RECIPE_ID = 1L;
+	private static final String RECIPE_ID = "1";
     private static final Integer COOK_TIME = 5;
     private static final Integer PREP_TIME = 7;
     private static final String DESCRIPTION = "DESCRIPTION";
@@ -25,12 +25,12 @@ class RecipeCommandToRecipeTest {
     private static final Integer SERVING = 3;
     private static final String SOURCE = "Source";
     private static final String URL = "Some URL";
-    private static final Long CATEGORIE_ID_01 = 1L;
-    private static final Long CATEGORIE_ID_02 = 2L;
-    private static final Long INGREDIENT_ID_01 = 3L;
-    private static final Long INGREDIENT_ID_02 = 4L;
-    private static final Long NOTES_ID = 9L;
-	
+	private static final String CATEGORIE_ID_01 = "1";
+	private static final String CATEGORIE_ID_02 = "2";
+	private static final String INGREDIENT_ID_01 = "3";
+	private static final String INGREDIENT_ID_02 = "4";
+	private static final String NOTES_ID = "9";
+
 	RecipeCommandToRecipe recipeCommandToRecipe;
 	
 	IngredientCommandToIngredient ingredientCommandToIngredient;

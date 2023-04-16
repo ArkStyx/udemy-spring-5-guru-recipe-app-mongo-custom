@@ -2,6 +2,7 @@ package guru.springframework.recipe.app.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,12 +50,12 @@ class RecipeControllerTest {
 	@Test
 	void getRecipe() throws Exception {
 		
-		Long idRecette = 1L;
+		String idRecette = "1";
 		
 		Recipe recette = new Recipe();
 		recette.setId(idRecette);
 		
-		when(recipeService.findById(anyLong())).thenReturn(recette);
+		when(recipeService.findById(anyString())).thenReturn(recette);
 
 		String rootContext = "/recipe/" + idRecette + "/show/";
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(rootContext);
@@ -89,7 +90,7 @@ class RecipeControllerTest {
 	void postNewRecipeForm() throws Exception {
 		
 		/* Given */
-		Long idRecette = 2L;
+		String idRecette = "2";
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId(idRecette);
 
@@ -110,8 +111,9 @@ class RecipeControllerTest {
 	
     @Test
     public void postNewRecipeFormValidationFail() throws Exception {
+		String idRecette = "2";
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId(idRecette);
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
@@ -129,12 +131,12 @@ class RecipeControllerTest {
 	void updateView() throws Exception {
 		
 		/* Given */
-		Long idRecette = 2L;
+		String idRecette = "2";
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId(idRecette);
 		
 		/* When */
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		/* Then */
 		mockMvc.perform(
@@ -153,12 +155,12 @@ class RecipeControllerTest {
 				andExpect(status().is3xxRedirection()).
 				andExpect(view().name("redirect:/"));
 		
-		verify(recipeService, times(1)).deleteById(anyLong());
+		verify(recipeService, times(1)).deleteById(anyString());
 	}
 	
 	@Test
 	void handleNotFound() throws Exception {
-		when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+		when(recipeService.findById(anyString())).thenThrow(NotFoundException.class);
 		
 		mockMvc.perform(
 					get("/recipe/1/show/")

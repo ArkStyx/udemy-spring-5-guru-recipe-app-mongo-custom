@@ -39,10 +39,10 @@ public class UnitOfMeasureServiceImplTestJupiter {
 		
 		/* Given */
 		UnitOfMeasure uniteDeMesure01 = new UnitOfMeasure();
-		uniteDeMesure01.setId(1L);
+		uniteDeMesure01.setId("1");
 		
 		UnitOfMeasure uniteDeMesure02 = new UnitOfMeasure();
-		uniteDeMesure02.setId(2L);
+		uniteDeMesure02.setId("2");
 		
 		Set<UnitOfMeasure> setUniteDeMesure = new LinkedHashSet<>();
 		setUniteDeMesure.add(uniteDeMesure01);

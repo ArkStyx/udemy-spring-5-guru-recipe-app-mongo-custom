@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class RecipeCommand {
 	
-	private Long id;
+	private String id;
 	
     @NotEmpty
     @Size(min = 3, max = 255)

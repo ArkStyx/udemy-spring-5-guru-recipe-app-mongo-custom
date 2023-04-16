@@ -4,9 +4,9 @@ import guru.springframework.recipe.app.commands.IngredientCommand;
 
 public interface IngredientService {
 
-	IngredientCommand recupererParIdRecetteEtIdIngredient(Long idRecette, Long idIngredient);
+	IngredientCommand recupererParIdRecetteEtIdIngredient(String idRecette, String idIngredient);
 
 	IngredientCommand sauvegarderIngredient(IngredientCommand ingredientCommand);
 
-	void supprimerIngredientDansRecetteParId(Long idRecette, Long idIngredient);
+	void supprimerIngredientDansRecetteParId(String idRecette, String idIngredient);
 }

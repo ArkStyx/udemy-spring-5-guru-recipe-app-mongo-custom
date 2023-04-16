@@ -2,9 +2,6 @@ package guru.springframework.recipe.app.domain;
 
 import java.math.BigDecimal;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,12 +9,19 @@ import lombok.Setter;
 @Setter
 public class Ingredient {
 
-	@Id
-	private Long id;
-	
+	private String id;
 	private String description;
 	private BigDecimal amount;
-	
-	@DBRef
 	private UnitOfMeasure unitOfMeasure;
+	
+	
+    public Ingredient() {
+    
+    }
+
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure unitOfMeasure) {
+        this.description = description;
+        this.amount = amount;
+        this.unitOfMeasure = unitOfMeasure;
+    }
 }

@@ -3,6 +3,7 @@ package guru.springframework.recipe.app.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,11 +53,11 @@ public class ImageControllerTest {
 	public void getImageForm() throws Exception {
 		
 		/* Given */
-		Long idRecette = 1L;
+		String idRecette = "1";
 		RecipeCommand recipeCommand = new RecipeCommand();
 		recipeCommand.setId(idRecette);
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		/* When */
 		
@@ -68,7 +69,7 @@ public class ImageControllerTest {
 				andExpect(view().name("recipe/imageuploadform")).
 				andExpect(model().attributeExists("recipe"));
 		
-		verify(recipeService, times(1)).findCommandById(anyLong());
+		verify(recipeService, times(1)).findCommandById(anyString());
 	}
 	
 	@Test
@@ -90,7 +91,7 @@ public class ImageControllerTest {
 				andExpect(status().is3xxRedirection()).
 				andExpect(header().string("Location", "/recipe/1/show"));
 		
-		verify(imageService, times(1)).saveImageFile(anyLong(), any());
+		verify(imageService, times(1)).saveImageFile(anyString(), any());
 	}
 	
 	@Test
@@ -106,11 +107,12 @@ public class ImageControllerTest {
 			imageFromDB[i++] = primByte;
 		}
 		
+		String idRecette = "1";
 		RecipeCommand recipeCommand = new RecipeCommand();
-		recipeCommand.setId(1L);
+		recipeCommand.setId(idRecette);
 		recipeCommand.setImage(imageFromDB);
 		
-		when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+		when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
 		
 		/* When */
 		

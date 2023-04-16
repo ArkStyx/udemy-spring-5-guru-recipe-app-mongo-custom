@@ -1,7 +1,6 @@
 package guru.springframework.recipe.app.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ class CategoryTestJupiter {
 	
 	@Test
 	void testGetId() {
-		Long valeurId = 4L;
+		String valeurId = "4";
 		category.setId(valeurId);
 		assertEquals(valeurId, category.getId());
 	}

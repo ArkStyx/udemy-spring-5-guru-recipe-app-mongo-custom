@@ -1,15 +1,11 @@
 package guru.springframework.recipe.app.bootstrap;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,349 +19,262 @@ import guru.springframework.recipe.app.domain.enums.Difficulty;
 import guru.springframework.recipe.app.repositories.CategoryRepository;
 import guru.springframework.recipe.app.repositories.RecipeRepository;
 import guru.springframework.recipe.app.repositories.UnitOfMeasureRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Created by jt on 6/13/17.
+ */
 @Slf4j
-@AllArgsConstructor
 @Component
 public class DefaultRecipeBootStrapData implements ApplicationListener<ContextRefreshedEvent> {
 
-	private final CategoryRepository categoryRepository;
-	private final RecipeRepository recipeRepository;
-	private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final CategoryRepository categoryRepository;
+    private final RecipeRepository recipeRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-	@Override
-	@Transactional
-	public void onApplicationEvent(ContextRefreshedEvent event) {
-		
-		List<Recipe> listeRecettes = new LinkedList<>();
-		listeRecettes.add(recupererRecetteGuacamole());
-		listeRecettes.add(recupererRecetteGrilledChickenTacos());
-		log.info("Chargement des recettes effectue");
+    public DefaultRecipeBootStrapData(CategoryRepository categoryRepository,
+                           RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+        this.categoryRepository = categoryRepository;
+        this.recipeRepository = recipeRepository;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    }
 
-		recipeRepository.saveAll(listeRecettes);
-		log.info("Sauvegarde des recettes effectuee");
-	}
-	
-	private Recipe recupererRecetteGuacamole() {
-		Recipe recetteGuacamole = new Recipe();
+    @Override
+    @Transactional
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        loadCategories();
+        loadUom();
+        recipeRepository.saveAll(getRecipes());
+        log.debug("Loading Bootstrap Data");
+    }
 
-		Category cuisineMexicaine = recupererCategorie("Mexican");
-		Category cuisineAmericaine = recupererCategorie("American");
+    private void loadCategories(){
+        Category cat1 = new Category();
+        cat1.setDescription("American");
+        categoryRepository.save(cat1);
 
-		Set<Category> categorieGuacamole = new LinkedHashSet<>();
-		categorieGuacamole.add(cuisineMexicaine);
-		categorieGuacamole.add(cuisineAmericaine);
+        Category cat2 = new Category();
+        cat2.setDescription("Italian");
+        categoryRepository.save(cat2);
 
-		StringBuffer directionGuacamoleBuffer = new StringBuffer();
-		directionGuacamoleBuffer.append("1 - Cut the avocado: ");
-		directionGuacamoleBuffer.append("Cut the avocados in half. Remove the pit. ");
-		directionGuacamoleBuffer.append("Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon. ");
-		directionGuacamoleBuffer.append("Place in a bowl. ");
-		directionGuacamoleBuffer.append("");
-		directionGuacamoleBuffer.append("2 - Mash the avocado flesh: ");
-		directionGuacamoleBuffer.append("Using a fork, roughly mash the avocado. ");
-		directionGuacamoleBuffer.append("Don't overdo it! The guacamole should be a little chunky. ");
-		directionGuacamoleBuffer.append("");
-		directionGuacamoleBuffer.append("3 - Add the remaining ingredients to taste: ");
-		directionGuacamoleBuffer.append("Sprinkle with salt and lime (or lemon) juice. ");
-		directionGuacamoleBuffer.append("The acid in the lime juice will provide some balance to the richness of the avocado and will help delay the avocados from turning brown. ");
-		directionGuacamoleBuffer.append("Add the chopped onion, cilantro, black pepper, and chilis. Chili peppers vary individually in their spiciness. ");
-		directionGuacamoleBuffer.append("So, start with a half of one chili pepper and add more to the guacamole to your desired degree of heat. ");
-		directionGuacamoleBuffer.append("Remember that much of this is done to taste because of the variability in the fresh ingredients. ");
-		directionGuacamoleBuffer.append("Start with this recipe and adjust to your taste. ");
-		directionGuacamoleBuffer.append("");
-		directionGuacamoleBuffer.append("4 - Serve immediately: ");
-		directionGuacamoleBuffer.append("If making a few hours ahead, place plastic wrap on the surface of the guacamole and press down to cover it to prevent air reaching it. ");
-		directionGuacamoleBuffer.append("Garnish with slices of red radish or jigama strips. ");
-		directionGuacamoleBuffer.append("Serve with your choice of store-bought tortilla chips or make your own homemade tortilla chips. ");
-		directionGuacamoleBuffer.append("Refrigerate leftover guacamole up to 3 days. ");
+        Category cat3 = new Category();
+        cat3.setDescription("Mexican");
+        categoryRepository.save(cat3);
 
-		StringBuffer noteGuacamoleBuffer = new StringBuffer();
-		noteGuacamoleBuffer.append("careful handling chilis! If using, it's best to wear food-safe gloves. ");
-		noteGuacamoleBuffer.append("If no gloves are available, wash your hands thoroughly after handling, ");
-		noteGuacamoleBuffer.append("and do not touch your eyes or the area near your eyes for several hours afterwards.");
+        Category cat4 = new Category();
+        cat4.setDescription("Fast Food");
+        categoryRepository.save(cat4);
+    }
 
-		Notes noteGuacamole = new Notes();
-		noteGuacamole.setRecipeNotes(noteGuacamoleBuffer.toString());
-		
-		recetteGuacamole.setCategories(categorieGuacamole);
-		recetteGuacamole.setCookTime(10);
-		recetteGuacamole.setDescription("Perfect Guacamole");
-		recetteGuacamole.setDifficulty(Difficulty.EASY);
-		recetteGuacamole.setDirections(directionGuacamoleBuffer.toString());
-		recetteGuacamole.setNotes(noteGuacamole);
-		recetteGuacamole.setPrepTime(10);
-		recetteGuacamole.setServings(2);
-		recetteGuacamole.setSource("Simply Recipes");
-		recetteGuacamole.setUrl("https://www.simplyrecipes.com/recipes/perfect_guacamole/");
-		
-		ajouterIngredientsGuacamole(recetteGuacamole);
-		
-		return recetteGuacamole;
-	}
+    private void loadUom(){
+        UnitOfMeasure uom1 = new UnitOfMeasure();
+        uom1.setDescription("Teaspoon");
+        unitOfMeasureRepository.save(uom1);
 
-	private Recipe recupererRecetteGrilledChickenTacos() {
-		Recipe recetteTacos = new Recipe();
+        UnitOfMeasure uom2 = new UnitOfMeasure();
+        uom2.setDescription("Tablespoon");
+        unitOfMeasureRepository.save(uom2);
 
-		Category cuisineMexicaine = recupererCategorie("Mexican");
-		Category cuisineAmericaine = recupererCategorie("American");
+        UnitOfMeasure uom3 = new UnitOfMeasure();
+        uom3.setDescription("Cup");
+        unitOfMeasureRepository.save(uom3);
 
-		Set<Category> categorieTacos = new LinkedHashSet<>();
-		categorieTacos.add(cuisineMexicaine);
-		categorieTacos.add(cuisineAmericaine);
-		
-		StringBuffer directionTacosBuffer = new StringBuffer();
-		directionTacosBuffer.append("1 - Prepare the grill: ");
-		directionTacosBuffer.append("Prepare either a gas or charcoal grill for medium-high, direct heat. ");
-		directionTacosBuffer.append("");
-		directionTacosBuffer.append("2 - Make the marinade and coat the chicken: ");
-		directionTacosBuffer.append("In a large bowl, stir together the chili powder, oregano, cumin, sugar, salt, garlic and orange zest. ");
-		directionTacosBuffer.append("Stir in the orange juice and olive oil to make a loose paste. Add the chicken to the bowl and toss to coat all over. ");
-		directionTacosBuffer.append("Set aside to marinate while the grill heats and you prepare the rest of the toppings. ");
-		directionTacosBuffer.append("");
-		directionTacosBuffer.append("3 - Grill the chicken: ");
-		directionTacosBuffer.append("Grill the chicken for 3 to 4 minutes per side, or until a thermometer inserted into the thickest part of the meat registers 165°F. ");
-		directionTacosBuffer.append("Transfer to a plate and rest for 5 minutes. ");
-		directionTacosBuffer.append("");
-		directionTacosBuffer.append("4 - Thin the sour cream with milk: ");
-		directionTacosBuffer.append("Stir together the sour cream and milk to thin out the sour cream to make it easy to drizzle. ");
-		directionTacosBuffer.append("");
-		directionTacosBuffer.append("5 - Assemble the tacos: ");
-		directionTacosBuffer.append("Slice the chicken into strips. On each tortilla, place a small handful of arugula. ");
-		directionTacosBuffer.append("Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. ");
-		directionTacosBuffer.append("Drizzle with the thinned sour cream. Serve with lime wedges. ");
-		directionTacosBuffer.append("");
-		directionTacosBuffer.append("6 - Warm the tortillas: ");
-		directionTacosBuffer.append("Place each tortilla on the grill or on a hot, dry skillet over medium-high heat. ");
-		directionTacosBuffer.append("As soon as you see pockets of the air start to puff up in the tortilla, turn it with tongs and heat for a few seconds on the other side. ");
-		directionTacosBuffer.append("Wrap warmed tortillas in a tea towel to keep them warm until serving. ");
+        UnitOfMeasure uom4 = new UnitOfMeasure();
+        uom4.setDescription("Pinch");
+        unitOfMeasureRepository.save(uom4);
 
-		StringBuffer noteTacosBuffer = new StringBuffer();
-		noteTacosBuffer.append("for ancho chile powder with the Mexican ingredients at your grocery store, on buy it online. ");
-		noteTacosBuffer.append("If you can't find ancho chili powder, you replace the ancho chili, the oregano, and the cumin with 2 1/2 tablespoons regular chili powder, ");
-		noteTacosBuffer.append("though the flavor won't be quite the same.");
+        UnitOfMeasure uom5 = new UnitOfMeasure();
+        uom5.setDescription("Ounce");
+        unitOfMeasureRepository.save(uom5);
 
-		Notes noteTacos = new Notes();
-		noteTacos.setRecipeNotes(noteTacosBuffer.toString());
-		
-		recetteTacos.setCategories(categorieTacos);
-		recetteTacos.setCookTime(15);
-		recetteTacos.setDescription("Chicken Tacos");
-		recetteTacos.setDifficulty(Difficulty.MODERATE);
-		recetteTacos.setDirections(directionTacosBuffer.toString());
-		recetteTacos.setNotes(noteTacos);
-		recetteTacos.setPrepTime(20);
-		recetteTacos.setServings(4);
-		recetteTacos.setSource("Simply Recipes");
-		recetteTacos.setUrl("https://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+        UnitOfMeasure uom6 = new UnitOfMeasure();
+        uom6.setDescription("Each");
+        unitOfMeasureRepository.save(uom6);
 
-		ajouterIngredientsTacos(recetteTacos);
-		
-		return recetteTacos;
-	}
-	
-	private UnitOfMeasure recupererUniteDeMesure(String uniteDeMesure) {
-		Optional<UnitOfMeasure> optionalUnitOfMeasure = unitOfMeasureRepository.findByDescription(uniteDeMesure);
-		if (optionalUnitOfMeasure.isEmpty()) {
-			throw new NoSuchElementException("Ingredient non present en BDD");
-		}
-		return optionalUnitOfMeasure.get();
-	}
+        UnitOfMeasure uom7 = new UnitOfMeasure();
+        uom7.setDescription("Pint");
+        unitOfMeasureRepository.save(uom7);
 
-	private Category recupererCategorie(String categorie) {	
-		Optional<Category> optionalCategory = categoryRepository.findByDescription(categorie);
-		if (optionalCategory.isEmpty()) {
-			throw new NoSuchElementException("Categorie non presente en BDD");
-		}
-		return optionalCategory.get();
-	}
-	
-	private void ajouterIngredientsGuacamole(Recipe recetteGuacamole) {
-		
-		UnitOfMeasure teaspoon = recupererUniteDeMesure("Teaspoon");
-		UnitOfMeasure tablespoon = recupererUniteDeMesure("Tablespoon");
-		UnitOfMeasure pinch = recupererUniteDeMesure("Pinch");
+        UnitOfMeasure uom8 = new UnitOfMeasure();
+        uom8.setDescription("Dash");
+        unitOfMeasureRepository.save(uom8);
+    }
 
-		Ingredient avocado = new Ingredient();
-		avocado.setDescription("avocado");
-		avocado.setAmount(BigDecimal.valueOf(2L));
-		
-		Ingredient kosherSalt = new Ingredient();
-		kosherSalt.setDescription("kosher salt");
-		kosherSalt.setAmount(BigDecimal.valueOf(0.25));
-		kosherSalt.setUnitOfMeasure(teaspoon);
-		
-		Ingredient lemonJuice = new Ingredient();
-		lemonJuice.setDescription("lemon juice");
-		lemonJuice.setAmount(BigDecimal.valueOf(1.0));
-		lemonJuice.setUnitOfMeasure(tablespoon);
-		
-		Ingredient redOnion = new Ingredient();
-		redOnion.setDescription("red onion");
-		redOnion.setAmount(BigDecimal.valueOf(2.0));
-		redOnion.setUnitOfMeasure(tablespoon);
-		
-		Ingredient jalapenoChili = new Ingredient();
-		jalapenoChili.setDescription("jalapeno chili");
-		jalapenoChili.setAmount(BigDecimal.valueOf(2.0));
-		
-		Ingredient cilantro = new Ingredient();
-		cilantro.setDescription("cilantro");
-		cilantro.setAmount(BigDecimal.valueOf(2.0));
-		cilantro.setUnitOfMeasure(tablespoon);
-		
-		Ingredient blackPepper = new Ingredient();
-		blackPepper.setDescription("black pepper");
-		blackPepper.setAmount(BigDecimal.valueOf(1.0));
-		blackPepper.setUnitOfMeasure(pinch);
-		
-		Ingredient ripeTomato = new Ingredient();
-		ripeTomato.setDescription("ripe tomato");
-		ripeTomato.setAmount(BigDecimal.valueOf(0.5));
-		
-		Ingredient redRadish = new Ingredient();
-		redRadish.setDescription("red radish");	
-		redRadish.setAmount(BigDecimal.valueOf(1.0));
-		
-		Ingredient tortillaChip = new Ingredient();
-		tortillaChip.setDescription("tortilla chip");	
-		tortillaChip.setAmount(BigDecimal.valueOf(2.0));
-		
-		recetteGuacamole.addIngredient(avocado);
-		recetteGuacamole.addIngredient(kosherSalt);
-		recetteGuacamole.addIngredient(lemonJuice);
-		recetteGuacamole.addIngredient(redOnion);
-		recetteGuacamole.addIngredient(jalapenoChili);
-		recetteGuacamole.addIngredient(cilantro);
-		recetteGuacamole.addIngredient(blackPepper);
-		recetteGuacamole.addIngredient(ripeTomato);
-		recetteGuacamole.addIngredient(redRadish);
-		recetteGuacamole.addIngredient(tortillaChip);
-	}
-	
-	
-	private void ajouterIngredientsTacos(Recipe recetteTacos) {
-		
-		UnitOfMeasure teaspoon = recupererUniteDeMesure("Teaspoon");
-		UnitOfMeasure tablespoon = recupererUniteDeMesure("Tablespoon");
-		UnitOfMeasure cup = recupererUniteDeMesure("Cup");
-		UnitOfMeasure pint = recupererUniteDeMesure("Pint");
-		UnitOfMeasure pound = recupererUniteDeMesure("Pound");
-		
-		Ingredient anchoChili = new Ingredient();
-		anchoChili.setDescription("ancho chili");
-		anchoChili.setAmount(BigDecimal.valueOf(2.0));
-		anchoChili.setUnitOfMeasure(tablespoon);
-		
-		Ingredient driedOregano = new Ingredient();
-		driedOregano.setDescription("dried oregano");
-		driedOregano.setAmount(BigDecimal.valueOf(1.0));
-		driedOregano.setUnitOfMeasure(teaspoon);
-		
-		Ingredient driedCumin = new Ingredient();
-		driedCumin.setDescription("dried cumin");
-		driedCumin.setAmount(BigDecimal.valueOf(1.0));
-		driedCumin.setUnitOfMeasure(teaspoon);
-		
-		Ingredient sugar = new Ingredient();
-		sugar.setDescription("sugar");
-		sugar.setAmount(BigDecimal.valueOf(1.0));
-		sugar.setUnitOfMeasure(teaspoon);
+    private List<Recipe> getRecipes() {
 
-		Ingredient kosherSalt = new Ingredient();
-		kosherSalt.setDescription("kosher salt");
-		kosherSalt.setAmount(BigDecimal.valueOf(0.50));
-		kosherSalt.setUnitOfMeasure(teaspoon);
+        List<Recipe> recipes = new ArrayList<>(2);
 
-		Ingredient garlic = new Ingredient();
-		garlic.setDescription("garlic");
-		garlic.setAmount(BigDecimal.valueOf(2.0));
+        //get UOMs
+        Optional<UnitOfMeasure> eachUomOptional = unitOfMeasureRepository.findByDescription("Each");
 
-		Ingredient gratedOrangeZest = new Ingredient();
-		gratedOrangeZest.setDescription("grated orange zest");
-		gratedOrangeZest.setAmount(BigDecimal.valueOf(2.0));
-		gratedOrangeZest.setUnitOfMeasure(tablespoon);
-		
-		Ingredient orangeJuice = new Ingredient();
-		orangeJuice.setDescription("fresh-squeezed orange juice");
-		orangeJuice.setAmount(BigDecimal.valueOf(2.0));
-		orangeJuice.setUnitOfMeasure(tablespoon);
-		
-		Ingredient oliveOil = new Ingredient();
-		oliveOil.setDescription("olive oil");
-		oliveOil.setAmount(BigDecimal.valueOf(2.0));
-		oliveOil.setUnitOfMeasure(tablespoon);
-		
-		Ingredient bonelessChickenThigh = new Ingredient();
-		bonelessChickenThigh.setDescription("boneless chicken thighs");
-		bonelessChickenThigh.setAmount(BigDecimal.valueOf(1.25));
-		bonelessChickenThigh.setUnitOfMeasure(pound);
+        if(!eachUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
 
-		Ingredient cornTortilla = new Ingredient();
-		cornTortilla.setDescription("corn tortillas");
-		cornTortilla.setAmount(BigDecimal.valueOf(8.0));
-		
-		Ingredient babyArugula = new Ingredient();
-		babyArugula.setDescription("baby arugula");
-		babyArugula.setAmount(BigDecimal.valueOf(3.0));
-		babyArugula.setUnitOfMeasure(cup);
-		
-		Ingredient ripeAvocado = new Ingredient();
-		ripeAvocado.setDescription("ripe avocados");
-		ripeAvocado.setAmount(BigDecimal.valueOf(2.0));
-		
-		Ingredient radish = new Ingredient();
-		radish.setDescription("radishes");
-		radish.setAmount(BigDecimal.valueOf(4.0));
-		
-		Ingredient cherryTomato = new Ingredient();
-		cherryTomato.setDescription("cherry tomatoes");
-		cherryTomato.setAmount(BigDecimal.valueOf(0.50));
-		cherryTomato.setUnitOfMeasure(pint);
-		
-		Ingredient redOnion = new Ingredient();
-		redOnion.setDescription("red onion");
-		redOnion.setAmount(BigDecimal.valueOf(0.25));
-		
-		Ingredient cilantro = new Ingredient();
-		cilantro.setDescription("cilantro");
-		cilantro.setAmount(BigDecimal.valueOf(1.0));
-		
-		Ingredient sourCream = new Ingredient();
-		sourCream.setDescription("sour cream");
-		sourCream.setAmount(BigDecimal.valueOf(0.50));
-		sourCream.setUnitOfMeasure(cup);
-		
-		Ingredient milk = new Ingredient();
-		milk.setDescription("milk");
-		milk.setAmount(BigDecimal.valueOf(0.25));
-		milk.setUnitOfMeasure(cup);
-		
-		Ingredient lime = new Ingredient();
-		lime.setDescription("lime");
-		lime.setAmount(BigDecimal.valueOf(1.0));
-		
-		recetteTacos.addIngredient(driedOregano);
-		recetteTacos.addIngredient(driedCumin);
-		recetteTacos.addIngredient(sugar);
-		recetteTacos.addIngredient(kosherSalt);
-		recetteTacos.addIngredient(garlic);
-		recetteTacos.addIngredient(gratedOrangeZest);
-		recetteTacos.addIngredient(orangeJuice);
-		recetteTacos.addIngredient(oliveOil);
-		recetteTacos.addIngredient(bonelessChickenThigh);
-		recetteTacos.addIngredient(cornTortilla);
-		recetteTacos.addIngredient(babyArugula);
-		recetteTacos.addIngredient(ripeAvocado);
-		recetteTacos.addIngredient(radish);
-		recetteTacos.addIngredient(cherryTomato);
-		recetteTacos.addIngredient(redOnion);
-		recetteTacos.addIngredient(cilantro);
-		recetteTacos.addIngredient(sourCream);
-		recetteTacos.addIngredient(milk);
-		recetteTacos.addIngredient(lime);
-	}
-	
+        Optional<UnitOfMeasure> tableSpoonUomOptional = unitOfMeasureRepository.findByDescription("Tablespoon");
+
+        if(!tableSpoonUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
+
+        Optional<UnitOfMeasure> teaSpoonUomOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
+
+        if(!teaSpoonUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
+
+        Optional<UnitOfMeasure> dashUomOptional = unitOfMeasureRepository.findByDescription("Dash");
+
+        if(!dashUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
+
+        Optional<UnitOfMeasure> pintUomOptional = unitOfMeasureRepository.findByDescription("Pint");
+
+        if(!pintUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
+
+        Optional<UnitOfMeasure> cupsUomOptional = unitOfMeasureRepository.findByDescription("Cup");
+
+        if(!cupsUomOptional.isPresent()){
+            throw new RuntimeException("Expected UOM Not Found");
+        }
+
+        //get optionals
+        UnitOfMeasure eachUom = eachUomOptional.get();
+        UnitOfMeasure tableSpoonUom = tableSpoonUomOptional.get();
+        UnitOfMeasure teapoonUom = tableSpoonUomOptional.get();
+        UnitOfMeasure dashUom = dashUomOptional.get();
+        UnitOfMeasure pintUom = dashUomOptional.get();
+        UnitOfMeasure cupsUom = cupsUomOptional.get();
+
+        //get Categories
+        Optional<Category> americanCategoryOptional = categoryRepository.findByDescription("American");
+
+        if(!americanCategoryOptional.isPresent()){
+            throw new RuntimeException("Expected Category Not Found");
+        }
+
+        Optional<Category> mexicanCategoryOptional = categoryRepository.findByDescription("Mexican");
+
+        if(!mexicanCategoryOptional.isPresent()){
+            throw new RuntimeException("Expected Category Not Found");
+        }
+
+        Category americanCategory = americanCategoryOptional.get();
+        Category mexicanCategory = mexicanCategoryOptional.get();
+
+        //Yummy Guac
+        Recipe guacRecipe = new Recipe();
+        guacRecipe.setDescription("Perfect Guacamole");
+        guacRecipe.setPrepTime(10);
+        guacRecipe.setCookTime(0);
+        guacRecipe.setDifficulty(Difficulty.EASY);
+        guacRecipe.setDirections("1 Cut avocado, remove flesh: Cut the avocados in half. Remove seed. Score the inside of the avocado with a blunt knife and scoop out the flesh with a spoon" +
+                "\n" +
+                "2 Mash with a fork: Using a fork, roughly mash the avocado. (Don't overdo it! The guacamole should be a little chunky.)" +
+                "\n" +
+                "3 Add salt, lime juice, and the rest: Sprinkle with salt and lime (or lemon) juice. The acid in the lime juice will provide some balance to the richness of the avocado and will help delay the avocados from turning brown.\n" +
+                "Add the chopped onion, cilantro, black pepper, and chiles. Chili peppers vary individually in their hotness. So, start with a half of one chili pepper and add to the guacamole to your desired degree of hotness.\n" +
+                "Remember that much of this is done to taste because of the variability in the fresh ingredients. Start with this recipe and adjust to your taste.\n" +
+                "4 Cover with plastic and chill to store: Place plastic wrap on the surface of the guacamole cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.\n" +
+                "Chilling tomatoes hurts their flavor, so if you want to add chopped tomato to your guacamole, add it just before serving.\n" +
+                "\n" +
+                "\n" +
+                "Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvpiV9Sd");
+
+        Notes guacNotes = new Notes();
+        guacNotes.setRecipeNotes("For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados.\n" +
+                "Feel free to experiment! One classic Mexican guacamole has pomegranate seeds and chunks of peaches in it (a Diana Kennedy favorite). Try guacamole with added pineapple, mango, or strawberries.\n" +
+                "The simplest version of guacamole is just mashed avocados with salt. Don't let the lack of availability of other ingredients stop you from making guacamole.\n" +
+                "To extend a limited supply of avocados, add either sour cream or cottage cheese to your guacamole dip. Purists may be horrified, but so what? It tastes great.\n" +
+                "\n" +
+                "\n" +
+                "Read more: http://www.simplyrecipes.com/recipes/perfect_guacamole/#ixzz4jvoun5ws");
+
+        guacRecipe.setNotes(guacNotes);
+
+        //very redundent - could add helper method, and make this simpler
+        guacRecipe.addIngredient(new Ingredient("ripe avocados", new BigDecimal(2), eachUom));
+        guacRecipe.addIngredient(new Ingredient("Kosher salt", new BigDecimal(".5"), teapoonUom));
+        guacRecipe.addIngredient(new Ingredient("fresh lime juice or lemon juice", new BigDecimal(2), tableSpoonUom));
+        guacRecipe.addIngredient(new Ingredient("minced red onion or thinly sliced green onion", new BigDecimal(2), tableSpoonUom));
+        guacRecipe.addIngredient(new Ingredient("serrano chiles, stems and seeds removed, minced", new BigDecimal(2), eachUom));
+        guacRecipe.addIngredient(new Ingredient("Cilantro", new BigDecimal(2), tableSpoonUom));
+        guacRecipe.addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), dashUom));
+        guacRecipe.addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), eachUom));
+
+        guacRecipe.getCategories().add(americanCategory);
+        guacRecipe.getCategories().add(mexicanCategory);
+
+        guacRecipe.setUrl("http://www.simplyrecipes.com/recipes/perfect_guacamole/");
+        guacRecipe.setServings(4);
+        guacRecipe.setSource("Simply Recipes");
+
+        //add to return list
+        recipes.add(guacRecipe);
+
+        //Yummy Tacos
+        Recipe tacosRecipe = new Recipe();
+        tacosRecipe.setDescription("Spicy Grilled Chicken Taco");
+        tacosRecipe.setCookTime(9);
+        tacosRecipe.setPrepTime(20);
+        tacosRecipe.setDifficulty(Difficulty.MODERATE);
+
+        tacosRecipe.setDirections("1 Prepare a gas or charcoal grill for medium-high, direct heat.\n" +
+                "2 Make the marinade and coat the chicken: In a large bowl, stir together the chili powder, oregano, cumin, sugar, salt, garlic and orange zest. Stir in the orange juice and olive oil to make a loose paste. Add the chicken to the bowl and toss to coat all over.\n" +
+                "Set aside to marinate while the grill heats and you prepare the rest of the toppings.\n" +
+                "\n" +
+                "\n" +
+                "3 Grill the chicken: Grill the chicken for 3 to 4 minutes per side, or until a thermometer inserted into the thickest part of the meat registers 165F. Transfer to a plate and rest for 5 minutes.\n" +
+                "4 Warm the tortillas: Place each tortilla on the grill or on a hot, dry skillet over medium-high heat. As soon as you see pockets of the air start to puff up in the tortilla, turn it with tongs and heat for a few seconds on the other side.\n" +
+                "Wrap warmed tortillas in a tea towel to keep them warm until serving.\n" +
+                "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.\n" +
+                "\n" +
+                "\n" +
+                "Read more: http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/#ixzz4jvtrAnNm");
+
+        Notes tacoNotes = new Notes();
+        tacoNotes.setRecipeNotes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
+                "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
+                "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
+                "First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
+                "Grill the chicken, then let it rest while you warm the tortillas. Now you are ready to assemble the tacos and dig in. The whole meal comes together in about 30 minutes!\n" +
+                "\n" +
+                "\n" +
+                "Read more: http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/#ixzz4jvu7Q0MJ");
+
+        tacosRecipe.setNotes(tacoNotes);
+
+        tacosRecipe.addIngredient(new Ingredient("Ancho Chili Powder", new BigDecimal(2), tableSpoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Dried Oregano", new BigDecimal(1), teapoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Dried Cumin", new BigDecimal(1), teapoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Sugar", new BigDecimal(1), teapoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Salt", new BigDecimal(".5"), teapoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Clove of Garlic, Choppedr", new BigDecimal(1), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("finely grated orange zestr", new BigDecimal(1), tableSpoonUom));
+        tacosRecipe.addIngredient(new Ingredient("fresh-squeezed orange juice", new BigDecimal(3), tableSpoonUom));
+        tacosRecipe.addIngredient(new Ingredient("Olive Oil", new BigDecimal(2), tableSpoonUom));
+        tacosRecipe.addIngredient(new Ingredient("boneless chicken thighs", new BigDecimal(4), tableSpoonUom));
+        tacosRecipe.addIngredient(new Ingredient("small corn tortillasr", new BigDecimal(8), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("packed baby arugula", new BigDecimal(3), cupsUom));
+        tacosRecipe.addIngredient(new Ingredient("medium ripe avocados, slic", new BigDecimal(2), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("radishes, thinly sliced", new BigDecimal(4), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("cherry tomatoes, halved", new BigDecimal(".5"), pintUom));
+        tacosRecipe.addIngredient(new Ingredient("red onion, thinly sliced", new BigDecimal(".25"), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("Roughly chopped cilantro", new BigDecimal(4), eachUom));
+        tacosRecipe.addIngredient(new Ingredient("cup sour cream thinned with 1/4 cup milk", new BigDecimal(4), cupsUom));
+        tacosRecipe.addIngredient(new Ingredient("lime, cut into wedges", new BigDecimal(4), eachUom));
+
+        tacosRecipe.getCategories().add(americanCategory);
+        tacosRecipe.getCategories().add(mexicanCategory);
+
+        tacosRecipe.setUrl("http://www.simplyrecipes.com/recipes/spicy_grilled_chicken_tacos/");
+        tacosRecipe.setServings(4);
+        tacosRecipe.setSource("Simply Recipes");
+
+        recipes.add(tacosRecipe);
+        return recipes;
+    }
 }

@@ -3,22 +3,15 @@ package guru.springframework.recipe.app.domain;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import guru.springframework.recipe.app.domain.enums.Difficulty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Document
 public class Recipe {
 
-	@Id
-	private Long id;
-	
+	private String id;
 	private String description;
 	private Integer prepTime;
 	private Integer cookTime;
@@ -30,8 +23,6 @@ public class Recipe {
 	private Byte[] image;
 	private Difficulty difficulty;
 	private Notes notes;
-	
-	@DBRef
 	private Set<Category> categories = new LinkedHashSet<>();
 	
 	/* Setter Custom qui vont remplacer les setter définis par Lombok */
