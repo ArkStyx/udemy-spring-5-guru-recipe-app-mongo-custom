@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import guru.springframework.recipe.app.commands.IngredientCommand;
 import guru.springframework.recipe.app.domain.Ingredient;
-import guru.springframework.recipe.app.domain.Recipe;
 import lombok.AllArgsConstructor;
 import lombok.Synchronized;
 
