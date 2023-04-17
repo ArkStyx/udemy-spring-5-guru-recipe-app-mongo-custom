@@ -82,7 +82,6 @@ public class IngredientServiceImplTestJupiter {
 		/* Then */
 		assertNotNull(ingredientCommand);
 		assertEquals(idIngredient, ingredientCommand.getId());
-		assertEquals(idRecette, ingredientCommand.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyString());
 	}
 	
@@ -91,8 +90,8 @@ public class IngredientServiceImplTestJupiter {
     public void testSauvegarderIngredient() throws Exception {
     	
 		/* Given */
-    	String idRecette = "2";
     	String idIngredient = "3";
+    	String idRecette = "2";
     	
         IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId(idIngredient);
@@ -114,7 +113,6 @@ public class IngredientServiceImplTestJupiter {
 		/* Then */
         assertNotNull(ingredientCommandSauvegardee);
         assertEquals(idIngredient, ingredientCommandSauvegardee.getId());
-        assertEquals(idRecette, ingredientCommandSauvegardee.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyString());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }

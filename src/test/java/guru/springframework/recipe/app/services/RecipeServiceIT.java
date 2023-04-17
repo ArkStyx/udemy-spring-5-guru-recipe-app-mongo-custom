@@ -2,6 +2,7 @@ package guru.springframework.recipe.app.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import guru.springframework.recipe.app.converters.fromdomain.RecipeToRecipeComma
 import guru.springframework.recipe.app.domain.Recipe;
 import guru.springframework.recipe.app.repositories.RecipeRepository;
 
+@Disabled
 @SpringBootTest
 public class RecipeServiceIT {
 

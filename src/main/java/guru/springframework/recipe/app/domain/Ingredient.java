@@ -13,8 +13,7 @@ public class Ingredient {
 	private String description;
 	private BigDecimal amount;
 	private UnitOfMeasure unitOfMeasure;
-	
-	
+
     public Ingredient() {
     
     }
@@ -24,4 +23,5 @@ public class Ingredient {
         this.amount = amount;
         this.unitOfMeasure = unitOfMeasure;
     }
+    
 }
