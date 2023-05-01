@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import guru.springframework.recipe.app.domain.UnitOfMeasure;
 
+@Disabled("Classe de tests seulement utilisable avec JPA")
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 class UnitOfMeasureRepositoryIntegrationTest {
