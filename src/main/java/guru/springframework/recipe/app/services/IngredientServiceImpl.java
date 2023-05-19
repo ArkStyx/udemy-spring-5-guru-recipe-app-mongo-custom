@@ -27,7 +27,9 @@ public class IngredientServiceImpl implements IngredientService {
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
 	
-	// XXX correspondance nom methode JAVA GURU - John Thompson : findByRecipeIdAndIngredientId()
+	/*
+	 * correspondance nom methode JAVA GURU - John Thompson : findByRecipeIdAndIngredientId()
+	 */
 	@Override
 	public IngredientCommand recupererParIdRecetteEtIdIngredient(String idRecette, String idIngredient) {
 		
@@ -52,7 +54,9 @@ public class IngredientServiceImpl implements IngredientService {
 		return optionalIngredientCommand.get();
 	}
 	
-	// XXX correspondance nom methode JAVA GURU - John Thompson : saveIngredientCommand()
+	/*
+	 * correspondance nom methode JAVA GURU - John Thompson : saveIngredientCommand()
+	 */
 	@Transactional
 	@Override
 	public IngredientCommand sauvegarderIngredient(IngredientCommand ingredientCommand) {
@@ -79,13 +83,7 @@ public class IngredientServiceImpl implements IngredientService {
 						.orElseThrow(() -> new RuntimeException("Unite de mesure non trouvee")));
 			}
 			else {
-				
-				// TODO METHODE 01
-//				recetteTrouvee.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
-				
-				// TODO METHODE 02 - QUEL DIFFERENCE AVEC LA METHODE 01 ?
-				Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
-				recetteTrouvee.addIngredient(ingredient);
+				recetteTrouvee.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
 			}
 			
 			Recipe recetteSauvegardee = recipeRepository.save(recetteTrouvee);
@@ -115,7 +113,9 @@ public class IngredientServiceImpl implements IngredientService {
 	}
 
 	
-	// XXX correspondance nom methode JAVA GURU - John Thompson : deleteById()
+	/*
+	 * correspondance nom methode JAVA GURU - John Thompson : deleteById()
+	 */
 	@Override
 	public void supprimerIngredientDansRecetteParId(String idRecette, String idIngredient) {
 
